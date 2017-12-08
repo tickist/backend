@@ -1,0 +1,21 @@
+{% load tickist_tags %}
+<div style="margin: 0 auto; width: 100%; float:left">
+    <div style="width: 5%; float: left;"><div style="height: 16px;width: 16px;background-color: {{ task.priority_color }};float:left; border-radius: 3px"></div></div>
+    <div style="float:left; width: 95%">
+        <div style="line-height: 115%;">
+            <strong><span style="font-size:14px;">{{ task.name }} {% if task.estimate_time > 0 %} ({{ task.estimate_time|humanize_time }}) {% endif %} </span></strong><span
+                style="float:right; font-size:12px;">{% if with_date %}{{ task.finish_date }}{% endif %}</span><br/>
+    <span style="font-size:10px;">{{ task.task_list.name }} {% if task.tags.all %} | {% for tag in task.tags.all %} #
+        {{ tag.name }} {% endfor %} {% endif %} {% if task.repeat_humanize %} |
+        {{ task.repeat_humanize }} {% endif %}</span>
+        </div>
+        {% if task.description %}
+            <div><span style="font-size:12px;">{{ task.description }}</span>
+            </div>{% endif %}
+        <p style="margin:0;padding-bottom:1em">
+    <span style="font-size:12px;">
+        {% for step in task.steps.all %}
+           <span {% if step.status == 1 %} style="text-decoration: line-through;" {% endif %}> &gt;&gt; {{ step.name }}</span><br/>
+        {% endfor %}</span>
+        </p></div>
+</div>

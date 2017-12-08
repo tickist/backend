@@ -1,0 +1,169 @@
+
+                                                    <table border="0" cellpadding="0" cellspacing="0"
+                                                           class="kmTextBlock" width="100%"
+                                                           style="border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0">
+                                                        <tbody class="kmTextBlockOuter">
+                                                        <tr>
+                                                            <td class="kmTextBlockInner" valign="top"
+                                                                style="border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;">
+                                                                <table align="left" border="0" cellpadding="0"
+                                                                       cellspacing="0" class="kmTextContentContainer"
+                                                                       width="100%"
+                                                                       style="border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0">
+                                                                    <tbody>
+                                                                    <tr>
+                                                                        <td class="kmTextContent" valign="top"
+                                                                            style="border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;color:#FFF;font-family:Helvetica, Arial;font-size:14px;line-height:150%;text-align:left;padding-top:9px;padding-bottom:9px;padding-left:18px;padding-right:18px;">
+                                                                            <h1 style="color:#FFF;display:block;font-family:Helvetica, Arial;font-size:26px;font-style:normal;font-weight:bold;line-height:110%;letter-spacing:normal;margin:0;margin-bottom:9px;text-align:left;margin-bottom: 0.14in; line-height: 115%;">
+                                                                                <span lang="en-US">Hi {{ username }},</span>
+                                                                            </h1>
+
+                                                                            <div style="margin-bottom: 0.14in; line-height: 115%;">
+                                                                                <span style="font-size:20px;"><strong>Overdue
+                                                                                    tasks</strong></span></div>
+                                                                                {% for task in overdue_tasks %}
+
+                                                                                    {% include 'notifications/emails/task.html' %}
+                                                                                {% empty %}
+
+                                                                                {% endfor %}
+
+                                                                            <div style="margin-bottom: 0.14in; line-height: 115%;">
+                                                                                <span style="font-size:20px;"><strong>Today</strong></span>
+                                                                            </div>
+
+                                                                                {% for task in today_tasks %}
+
+                                                                                    {% include 'notifications/emails/task.html' %}
+                                                                                {% empty %}
+
+                                                                                {% endfor %}
+                                                                            <div style="margin-bottom: 0.14in; line-height: 115%;">
+                                                                                <span style="font-size:20px;"><strong>Pinned
+                                                                                    to today <img alt=""
+                                                                                                  src="http://freeflaticons.net/wp-content/uploads/2014/09/aeroplane-airport-free-transport-icons-1410097456gn48k-150x150.png"
+                                                                                                  style="border:0;height:auto;line-height:100%;outline:none;text-decoration:none;width: 150px; height: 150px;"/></strong></span>
+                                                                            </div>
+                                                                                {% for task in pinned_tasks %}
+
+                                                                                    {% include 'notifications/emails/task.html' %}
+                                                                                {% empty %}
+
+                                                                                {% endfor %}
+
+{#                                                                            Table with statistics#}
+                                                                             <table border="0" cellpadding="0" cellspacing="0"
+                                                           class="kmTableBlock kmTableMobile" width="100%"
+                                                           style="border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0">
+                                                        <tbody class="kmTableBlockOuter">
+                                                        <tr>
+                                                            <td class="kmTableBlockInner" valign="top"
+                                                                style="border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;padding-top:9px;padding-bottom:9px;padding-left:18px;padding-right:18px;">
+                                                                <table align="left" border="0" cellpadding="0"
+                                                                       cellspacing="0" class="kmTable" width="100%"
+                                                                       style="border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;">
+                                                                    <thead>
+                                                                    <tr>
+                                                                        <th valign="top" class="kmTextContent"
+                                                                            style="color:#FFF;font-family:Helvetica, Arial;font-size:14px;line-height:150%;text-align:left;text-align:left;padding-top:4px;font-weight:bold;padding-right:0px;padding-left:0px;padding-bottom:4px;">
+                                                                        </th>
+                                                                        <th valign="top" class="kmTextContent"
+                                                                            style="color:#FFF;font-family:Helvetica, Arial;font-size:14px;line-height:150%;text-align:left;text-align:center;padding-top:4px;font-weight:bold;padding-right:0px;padding-left:0px;padding-bottom:4px;">
+                                                                            All tasks
+                                                                        </th>
+                                                                        <th valign="top" class="kmTextContent"
+                                                                            style="color:#FFF;font-family:Helvetica, Arial;font-size:14px;line-height:150%;text-align:left;text-align:center;padding-top:4px;font-weight:bold;padding-right:0px;padding-left:0px;padding-bottom:4px;">
+                                                                            Priority A
+                                                                        </th>
+                                                                        <th valign="top" class="kmTextContent"
+                                                                            style="color:#FFF;font-family:Helvetica, Arial;font-size:14px;line-height:150%;text-align:left;text-align:center;padding-top:4px;font-weight:bold;padding-right:0px;padding-left:0px;padding-bottom:4px;">
+                                                                            Priority B
+                                                                        </th>
+                                                                        <th valign="top" class="kmTextContent"
+                                                                            style="color:#FFF;font-family:Helvetica, Arial;font-size:14px;line-height:150%;text-align:left;text-align:center;padding-top:4px;font-weight:bold;padding-right:0px;padding-left:0px;padding-bottom:4px;">
+                                                                            Priority C
+                                                                        </th>
+                                                                    </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                    <tr class="kmTableRow">
+                                                                        <td valign="top" class="kmTextContent"
+                                                                            style="border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;color:#FFF;font-family:Helvetica, Arial;font-size:14px;line-height:150%;text-align:left;text-align:left;;border-top-style:solid;padding-bottom:4px;padding-right:0px;padding-left:0px;padding-top:4px;border-top-color:#d9d9d9;border-top-width:1px;">
+                                                                            Number of tasks
+                                                                        </td>
+                                                                        <td valign="top" class="kmTextContent"
+                                                                            style="border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;color:#FFF;font-family:Helvetica, Arial;font-size:14px;line-height:150%;text-align:left;text-align:center;;border-top-style:solid;padding-bottom:4px;padding-right:0px;padding-left:0px;padding-top:4px;border-top-color:#d9d9d9;border-top-width:1px;">
+                                                                            <p style="margin:0;padding-bottom:0;text-align: center;">
+                                                                                12</p>
+                                                                        </td>
+                                                                        <td valign="top" class="kmTextContent"
+                                                                            style="border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;color:#FFF;font-family:Helvetica, Arial;font-size:14px;line-height:150%;text-align:left;text-align:center;;border-top-style:solid;padding-bottom:4px;padding-right:0px;padding-left:0px;padding-top:4px;border-top-color:#d9d9d9;border-top-width:1px;">
+                                                                            <p style="margin:0;padding-bottom:0;text-align: center;">
+                                                                                12</p>
+                                                                        </td>
+                                                                        <td valign="top" class="kmTextContent"
+                                                                            style="border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;color:#FFF;font-family:Helvetica, Arial;font-size:14px;line-height:150%;text-align:left;text-align:center;;border-top-style:solid;padding-bottom:4px;padding-right:0px;padding-left:0px;padding-top:4px;border-top-color:#d9d9d9;border-top-width:1px;">
+                                                                            <p style="margin:0;padding-bottom:0;text-align: center;">
+                                                                                213</p>
+                                                                        </td>
+                                                                        <td valign="top" class="kmTextContent"
+                                                                            style="border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;color:#FFF;font-family:Helvetica, Arial;font-size:14px;line-height:150%;text-align:left;border-right:none;text-align:center;;border-top-style:solid;padding-bottom:4px;padding-right:0px;padding-left:0px;padding-top:4px;border-top-color:#d9d9d9;border-top-width:1px;">
+                                                                            <p style="margin:0;padding-bottom:0;text-align: center;">
+                                                                                21</p>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr class="kmTableRow">
+                                                                        <td valign="top" class="kmTextContent"
+                                                                            style="border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;color:#FFF;font-family:Helvetica, Arial;font-size:14px;line-height:150%;text-align:left;border-bottom:none;text-align:left;;border-top-style:solid;padding-bottom:4px;padding-right:0px;padding-left:0px;padding-top:4px;border-top-color:#d9d9d9;border-top-width:1px;">
+                                                                            Estimated time
+                                                                        </td>
+                                                                        <td valign="top" class="kmTextContent"
+                                                                            style="border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;color:#FFF;font-family:Helvetica, Arial;font-size:14px;line-height:150%;text-align:left;border-bottom:none;text-align:center;;border-top-style:solid;padding-bottom:4px;padding-right:0px;padding-left:0px;padding-top:4px;border-top-color:#d9d9d9;border-top-width:1px;">
+                                                                            <p style="margin:0;padding-bottom:0;text-align: center;">
+                                                                                12h</p>
+                                                                        </td>
+                                                                        <td valign="top" class="kmTextContent"
+                                                                            style="border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;color:#FFF;font-family:Helvetica, Arial;font-size:14px;line-height:150%;text-align:left;border-bottom:none;text-align:center;;border-top-style:solid;padding-bottom:4px;padding-right:0px;padding-left:0px;padding-top:4px;border-top-color:#d9d9d9;border-top-width:1px;">
+                                                                            <p style="margin:0;padding-bottom:0;text-align: center;">
+                                                                                2h</p>
+                                                                        </td>
+                                                                        <td valign="top" class="kmTextContent"
+                                                                            style="border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;color:#FFF;font-family:Helvetica, Arial;font-size:14px;line-height:150%;text-align:left;border-bottom:none;text-align:center;;border-top-style:solid;padding-bottom:4px;padding-right:0px;padding-left:0px;padding-top:4px;border-top-color:#d9d9d9;border-top-width:1px;">
+                                                                            <p style="margin:0;padding-bottom:0;text-align: center;">
+                                                                                3h</p>
+                                                                        </td>
+                                                                        <td valign="top" class="kmTextContent"
+                                                                            style="border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;color:#FFF;font-family:Helvetica, Arial;font-size:14px;line-height:150%;text-align:left;border-right:none;border-bottom:none;text-align:center;;border-top-style:solid;padding-bottom:4px;padding-right:0px;padding-left:0px;padding-top:4px;border-top-color:#d9d9d9;border-top-width:1px;">
+                                                                            <p style="margin:0;padding-bottom:0;text-align: center;">
+                                                                                3h</p>
+                                                                        </td>
+                                                                    </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+
+                                                                            <div style="margin-bottom: 0.14in; line-height: 115%;">
+                                                                                <em><span style="font-size:11px;">If you want to stop email notification, please change your notification settings</span></em>
+                                                                            </div>
+                                                                            <div style="margin-bottom: 0.14in; line-height: 115%; text-align: right;">
+                                                                                <span style="line-height: 115%; text-align: right;">Enjoy the ticking</span>
+                                                                            </div>
+                                                                            <div class="kmParagraph"
+                                                                                 style="padding-bottom:9px">
+                                                                                <div style="margin-bottom: 0.14in; line-height: 115%; text-align: right;">
+                                                                                    <span lang="en-US">Tickist Team</span>
+                                                                                </div>
+                                                                            </div>
+                                                                        </td>
+                                                                    </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+
+                                                  
