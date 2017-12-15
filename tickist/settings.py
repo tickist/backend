@@ -155,7 +155,7 @@ else:
         'django.middleware.csrf.CsrfViewMiddleware',
         'django.contrib.auth.middleware.AuthenticationMiddleware',
         'django.contrib.messages.middleware.MessageMiddleware',
-        'social.apps.django_app.middleware.SocialAuthExceptionMiddleware',
+        'social_django.middleware.SocialAuthExceptionMiddleware',
         # Uncomment the next line for simple clickjacking protection:
         # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
     )
@@ -378,7 +378,6 @@ EMAIL_PORT = os.environ.get("EMAIL_PORT", "")
 EMAIL_BACKEND = 'django_smtp_ssl.SSLEmailBackend'
 
 
-#aby testy były odpalane w pamięci ram
 if 'test' in sys.argv:
        DATABASES['default'] = {'ENGINE': 'django.db.backends.sqlite3'}
 

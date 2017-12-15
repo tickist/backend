@@ -13,9 +13,8 @@ __pycache__/
 .Python
 env/
 venv/
-backend/venv/
-backend/media/
-backend/site_media/
+media/
+site_media/
 backend/uploaded/
 build/
 develop-eggs/
@@ -78,7 +77,6 @@ db.sqlite3
 *node_modules
 
 site.retry
-code/media
-code/static
+
 
 .DS_Store

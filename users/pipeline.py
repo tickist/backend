@@ -11,7 +11,7 @@ from social.pipeline.user import get_username as social_get_username
 from emails.utils import async_send_email
 from commons.utils import gen_passwd
 from django.db.models.loading import get_model
-from social.apps.django_app.default.models import UserSocialAuth
+from social_django.models import UserSocialAuth
 
 
 def get_username(strategy, details, user=None, *args, **kwargs):
