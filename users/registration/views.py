@@ -63,13 +63,19 @@ class CheckEmailView(generics.GenericAPIView):
     def post(self, request):
         data = request.data.copy()
         email = data.get("email", None)
+        response_object = {}
         if email:
             if not User.objects.filter(email=data['email'], is_active=True).exists():
-                return Response(_(u"Email is free"), status=status.HTTP_200_OK)
-        return Response(_("Sorry, it looks like %s belongs to an existing account." % email),
-                        status=status.HTTP_400_BAD_REQUEST)
+                response_object['is_taken'] = False
+                response_object['messege'] = _(u"Email is free")
+            else:
+                response_object['is_taken'] = True
+                response_object['messege'] = _("Sorry, it looks like %s belongs to an existing account." % email)
+        else:
+            response_object['is_taken'] = False
+            response_object['messege'] = _(u"Please send an email to check")
 
-
+        return Response(response_object, status=status.HTTP_200_OK)
 
 class SimpleRegistrationView(generics.CreateAPIView):
     """
