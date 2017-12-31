@@ -88,7 +88,7 @@ def send_email(topic, template, email=None, data_email=None, sender=None, is_sen
 
     if is_send_now:
 
-        email = EmailMessage(subject=topic, body = body, from_email=from_email, to=[email], connection=connection)
+        email = EmailMessage(subject=topic, body=body, from_email=from_email, to=[email], connection=connection)
         email.content_subtype = "html"
         #if file:
         #    email.attach(file.name, file.read(), "application/pdf")

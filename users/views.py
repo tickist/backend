@@ -1,5 +1,6 @@
 #-*- coding: utf-8 -*-
 from datetime import datetime
+from django.conf import settings
 from django.contrib.auth import login
 from django.utils.translation import ugettext as _
 from django.db import IntegrityError, transaction

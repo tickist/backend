@@ -26,7 +26,7 @@ def create_thumbnail(path, user_id, type_profile=1,
             if img.mode != "RGB":
                 img = img.convert("RGB")
             if frames:
-                img_new_frame = Image.new("RGBA", (size[0], size[1]), (255, 255, 255))
+                img_new_frame = Image.new("RGB", (size[0], size[1]), (255, 255, 255))
                 img_new_frame.paste(img, ((size[0] - img.size[0]) // 2, (size[1] - img.size[1]) // 2))
                 img = img_new_frame
 

@@ -74,6 +74,7 @@ class CheckEmailView(generics.GenericAPIView):
         else:
             response_object['is_taken'] = False
             response_object['messege'] = _(u"Please send an email to check")
+            return Response(response_object, status=status.HTTP_400_BAD_REQUEST)
 
         return Response(response_object, status=status.HTTP_200_OK)
 

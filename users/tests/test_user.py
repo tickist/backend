@@ -16,6 +16,7 @@ from dashboard.tasks.models import Tag
 from dashboard.lists.models import List, ShareListPending
 from dashboard.lists.factory_classes import ListFactory, ListFactoryShareWithUsers
 from dashboard.tasks.factory_classes import TagFactory, TaskWithTagsAndStepsFactory
+from django.test.utils import override_settings
 from ..serializers import UserSerializer
 
 class CreateUserWithInboxTestCase(TestCase):
@@ -333,6 +334,7 @@ class EditUserTestCase(TestCase):
         bill = User.objects.get(id=self.bill.id)
         self.assertEqual(bill.email, self.bill.email)
 
+    @override_settings(ADMINS=(('Jon Doe', 'jon_doe@example.com'),))
     def test_send_message_to_board(self):
         """
             Test send message to board

@@ -1,6 +1,7 @@
 #-*- coding: utf-8 -*-
 
 import json
+from django.core.management import call_command
 from datetime import date, timedelta
 from django.test import TestCase
 from django.urls import reverse

@@ -19,6 +19,7 @@ from dashboard.lists.models import List, ShareListPending
 from .mixins import UpdateListMixin
 # create list
 
+
 class CreateListTest(TestCase):
 
     def setUp(self):
@@ -50,8 +51,8 @@ class CreateListTest(TestCase):
     def test_craete_list_with_sharelist_non_user(self):
         email = "test@test.com"
         list_name = "List 1"
-        response = self.client.post(self.url, json.dumps({"name": list_name,  "share_with": [email]}), follow=True,
-                                    content_type='application/json')
+        response = self.client.post(self.url, json.dumps({"name": list_name,  "share_with": [{'email': email}]}),
+                                    follow=True, content_type='application/json')
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertTrue(ShareListPending.objects.filter(email=email, list=List.objects.get(name=list_name)).exists())
@@ -129,7 +130,7 @@ class EditListTest(UpdateListMixin, TestCase):
 
     def test_sharing_list(self):
         put_dict = self._create_list_dictionary(self.list_1)
-        put_dict.update({"share_with": [{'id':str(self.team_mate.id)}]})
+        put_dict.update({"share_with": [{'id': str(self.team_mate.id)}]})
         url = reverse("list-detail", kwargs={'pk': self.list_1_1.pk})
         response = self.client.put(url, json.dumps(put_dict), follow=True, content_type='application/json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -180,7 +181,7 @@ class EditListTest(UpdateListMixin, TestCase):
     def test_sharing_list_non_user(self):
         email = "new_email@example.com"
         put_dict = self._create_list_dictionary(self.list_1)
-        put_dict.update({"share_with": [email]})
+        put_dict.update({"share_with": [{'email': email}]})
         url = reverse("list-detail", kwargs={'pk': self.list_1.pk})
         response = self.client.put(url, json.dumps(put_dict), follow=True, content_type='application/json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
