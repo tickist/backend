@@ -266,7 +266,8 @@ EXTERNAL_APPS = (
     'social_django',
     'session_cleanup',
     'corsheaders',
-    'django_celery_results'
+    'django_celery_results',
+    'django_celery_beat',
 )
 
 INSTALLED_APPS += MY_APPS

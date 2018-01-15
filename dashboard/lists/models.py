@@ -52,6 +52,7 @@ class List(MPTTModel):
     modification_date = models.DateTimeField(editable=False, auto_now=True)
     color = models.CharField(default=settings.DEFAULT_COLOR_LIST, max_length=100)
     is_active = models.BooleanField(default=True)
+    dialog_time_when_task_finished = models.BooleanField(default=False)
     #list rules
     default_priority = models.CharField(choices=choices_priority, default="C", max_length=1)
     default_finish_date = models.IntegerField(choices=choices_default_finish_date, null=True, blank=True)

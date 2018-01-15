@@ -6,7 +6,7 @@ argparse==1.2.1
 boto==2.42.0
 crypto==1.1.0
 docutils
-celery==4.0.2
+celery==4.1
 django-appconf==0.6
 django-debug-panel
 django-debug-toolbar
@@ -32,6 +32,7 @@ sqlparse==0.1.10
 coverage
 django_celery_results==1.0.1
 celery-with-redis
+django_celery_beat
 django-smtp-ssl
 django-session-cleanup
 django-cors-headers
