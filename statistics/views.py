@@ -13,11 +13,11 @@ from rest_framework.renderers import JSONRenderer
 from datetime import date, datetime
 from dateutil.relativedelta import relativedelta
 from rest_framework import status
-from dashboard.tasks.models import Task, TaskStatistics, Tag
+from dashboard.tasks.models import Task, TaskStatistics, Tag, PRIORITIES
 from dashboard.lists.models import List
 from django.db.models import Sum, Count
 from django.db.models import Q, Avg, Max, Min, Sum
-from commons.utils import zero_or_number
+from commons.utils import zero_or_number, hex_code_colors
 
 
 class DayStatistics(APIView):
@@ -37,7 +37,8 @@ class DayStatistics(APIView):
             priority_list.append({'name': u"%s" % priority,
                                   'time': querylist.filter(priority=priority).aggregate(Sum("estimate_time"))[
                                       'estimate_time__sum'],
-                                  'count': querylist.filter(priority=priority).count()})
+                                  'count': querylist.filter(priority=priority).count(),
+                                  'color': PRIORITIES[priority]['color']})
         return priority_list
 
     def _get_tags_list(self, querylist):
@@ -51,7 +52,8 @@ class DayStatistics(APIView):
         for tag in tags:
             tags_list.append({'name': u"Tag %s" % Tag.objects.get(id=tag).name,
                               'time': querylist.filter(tags=tag).aggregate(Sum("estimate_time"))['estimate_time__sum'],
-                              'count': querylist.filter(tags=tag).count()})
+                              'count': querylist.filter(tags=tag).count(),
+                              'color': hex_code_colors()})
         return tags_list
 
     def _get_list(self, querylist):
@@ -59,10 +61,12 @@ class DayStatistics(APIView):
         lists = querylist.values_list("task_list", flat=True).distinct()
         list_list = []
         for my_list in lists:
-            list_list.append({'name': List.objects.get(id=my_list).name,
+            listObject = List.objects.get(id=my_list)
+            list_list.append({'name': listObject.name,
                               'time': querylist.filter(task_list=my_list).aggregate(Sum("estimate_time"))[
                                   'estimate_time__sum'],
-                              'count': querylist.filter(task_list=my_list).count()})
+                              'count': querylist.filter(task_list=my_list).count(),
+                              'color': listObject.color})
         return list_list
 
     def _get_statistics_for_day_and_overdue_tasks(self):

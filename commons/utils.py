@@ -1,10 +1,12 @@
 #-*- coding: utf-8 -*-
 import string
+import random
 from random import choice
 from django.contrib.auth.models import User
 from django.conf import settings
 from rest_framework.negotiation import BaseContentNegotiation
 from emails.utils import send_email, async_send_email
+from functools import wraps
 
 
 class IgnoreClientContentNegotiation(BaseContentNegotiation):
@@ -80,6 +82,7 @@ def custom_proc(request):
         'TWITTER': settings.TWITTER
     }
 
+
 def my_bool(string):
 
     if string == "false":
@@ -89,6 +92,7 @@ def my_bool(string):
     else:
         return bool(string)
 
+
 def send_email_to_admins(topic="", template="", data={}):
     """
         Function sends email to all administrators
@@ -97,7 +101,23 @@ def send_email_to_admins(topic="", template="", data={}):
         async_send_email.apply_async(kwargs={"topic": topic, "template": template, "email": admin[1], "data_email": data})
 
 
-from functools import wraps
+def hex_code_colors():
+    a = hex(random.randrange(0, 256))
+    b = hex(random.randrange(0, 256))
+    c = hex(random.randrange(0, 256))
+    a = a[2:]
+    b = b[2:]
+    c = c[2:]
+    if len(a) < 2:
+        a = "0" + a
+    if len(b) < 2:
+        b = "0" + b
+    if len(c) < 2:
+        c = "0" + c
+    z = a + b + c
+    return "#" + z.upper()
+
+
 def disable_for_loaddata(signal_handler):
     """
     Decorator that turns off signal handlers when loading fixture data.
