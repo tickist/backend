@@ -43,7 +43,7 @@ class SimpleListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = List
-        fields = ("id", "name", "color", "share_with", "task_finish_date")
+        fields = ("id", "name", "color", "share_with", "dialog_time_when_task_finished")
 
 
 class ShareListPendingSerializer(serializers.ModelSerializer):

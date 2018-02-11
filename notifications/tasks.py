@@ -39,7 +39,7 @@ def daily_summary():
 
                 }
 
-                async_send_email(topic=_("Tickist: Your tasks for today (%s-%s-%s)" % (today.day, today.month, today.year)),
+                async_send_email(topic=_("Tickist: Your tasks for today (%s-%s-%s)" % (str(today.day).zfill(2), str(today.month).zfill(2), today.year)),
                                  template="notifications/emails/daily.html", email=user.email, user=user,
                                  data_email={'today_tasks': today_tasks, "overdue_tasks": overdue_tasks,  "user": user,
                                              "pinned_tasks": pinned_tasks, "statistics": statistics})
