@@ -191,7 +191,7 @@ class User(AbstractBaseUser):
         if self.avatar.name.find("default_avatar_user") >= 0:
             url = '/' + self.avatar.name
         else:
-            url = self.avatar.name
+            url = '/media/' + self.avatar.name
         return url
 
     def save(self, *args, **kwargs):
