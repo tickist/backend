@@ -19,7 +19,7 @@ class UserSerializer(serializers.ModelSerializer):
                   "changes_task_from_shared_list_that_i_assigned_to_him_her", "leaves_shared_list",
                   "order_tasks_dashboard", "deletes_list_shared_with_me", "default_task_view_today_view",
                   "default_task_view_overdue_view", "default_task_view_future_view", "default_task_view_tags_view",
-                  "default_task_view")
+                  "default_task_view", "overdue_tasks_sort_by", "future_tasks_sort_by")
 
 
 class SimpleUserSerializer(serializers.ModelSerializer):

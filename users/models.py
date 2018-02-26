@@ -25,6 +25,12 @@ def get_path(user, name):
 ORDER_TASKS_DASHBOARD = [('Today->Overdue->You can do this too', "Today->Overdue->You can do this too"),
                          ("Overdue->Today->You can do this too", "Overdue->Today->You can do this too")]
 
+OVERDUE_TASKS_SORT_BY_OPTIONS = [('{"fields": ["priority", "finishDate", "name"], "orders": ["asc", "asc", "asc"]}', 'priority, finishDate, name'),
+                                 ('{"fields": ["priority", "finishDate", "name"], "orders": ["asc", "desc", "asc"]}', 'priority, -finishDate, name')]
+
+FUTURE_TASKS_SORT_BY_OPTIONS = [('{"fields": ["finishDate", "finishTime", "name"], "orders": ["desc", "asc", "asc"]}', 'finishDate, finishTime, name'),
+                                ('{"fields": ["finishDate", "finishTime", "name"], "orders": ["asc", "desc", "asc"]}', '-finishDate, finishTime, name')]
+
 
 class User(AbstractBaseUser):
     """
@@ -60,6 +66,10 @@ class User(AbstractBaseUser):
     default_task_view_future_view = models.CharField(max_length=40, choices=DEFAULT_TASK_VIEW, default='simple')
     default_task_view_tags_view = models.CharField(max_length=40, choices=DEFAULT_TASK_VIEW, default='extended')
     dialog_time_when_task_finished_in_project = models.BooleanField(default=False)
+    overdue_tasks_sort_by = models.CharField(max_length=100, choices=OVERDUE_TASKS_SORT_BY_OPTIONS,
+                                             default=OVERDUE_TASKS_SORT_BY_OPTIONS[0][0])
+    future_tasks_sort_by = models.CharField(max_length=100, choices=FUTURE_TASKS_SORT_BY_OPTIONS,
+                                            default=FUTURE_TASKS_SORT_BY_OPTIONS[0][0])
     USERNAME_FIELD = 'email'
 
     REQUIRED_FIELDS = []

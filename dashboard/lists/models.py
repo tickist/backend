@@ -28,7 +28,7 @@ color_list = [("#6be494", "#6be494"),
 
 choices_priority = [('A', "A"), ("B", "B"), ("C", "C")]
 choices_type_finish_date = [[0, _("by")], [1, _("on")]]
-choices_default_finish_date = [[0, 'today'], [1, 'tomorrow'], [2, 'next week']]
+choices_default_finish_date = [[0, 'today'], [1, 'tomorrow'], [2, 'next week'], [3, 'next month']]
 
 
 def get_path(user, name):
@@ -56,8 +56,9 @@ class List(MPTTModel):
     #list rules
     default_priority = models.CharField(choices=choices_priority, default="C", max_length=1)
     default_finish_date = models.IntegerField(choices=choices_default_finish_date, null=True, blank=True)
-    default_type_finish_date = models.IntegerField(choices=choices_type_finish_date, null=True, blank=True)
-    default_task_view = models.CharField(max_length=40, choices=DEFAULT_TASK_VIEW, default='extended')
+    default_type_finish_date = models.IntegerField(choices=choices_type_finish_date, null=True, blank=True,
+                                                   default=choices_type_finish_date[1][0])
+    default_task_view = models.CharField(max_length=40, choices=DEFAULT_TASK_VIEW, default=DEFAULT_TASK_VIEW[0][0])
 
     class MPTTMeta:
         parent_attr = "ancestor"
