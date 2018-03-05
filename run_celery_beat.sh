@@ -3,5 +3,4 @@
 # wait for RabbitMQ server to start
 sleep 10
 
-celery -A tickist beat --loglevel=INFO --pidfile=/tmp/celerybeat-myapp.pid -S djcelery.schedulers.DatabaseScheduler
-
+celery -A tickist beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler
