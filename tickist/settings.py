@@ -376,7 +376,11 @@ EMAIL_USE_TLS = ast.literal_eval(os.environ.get("EMAIL_USE_TLS", "True"))
 SERVER_EMAIL = EMAIL_HOST_USER
 MY_MAIL = "Tickist  <notification@tickist.com>"
 EMAIL_PORT = os.environ.get("EMAIL_PORT", "")
-EMAIL_BACKEND = 'django_smtp_ssl.SSLEmailBackend'
+
+if PRODUCTION:
+    EMAIL_BACKEND = 'django_smtp_ssl.SSLEmailBackend'
+else:
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 
 if 'test' in sys.argv:

@@ -25,11 +25,15 @@ def get_path(user, name):
 ORDER_TASKS_DASHBOARD = [('Today->Overdue->You can do this too', "Today->Overdue->You can do this too"),
                          ("Overdue->Today->You can do this too", "Overdue->Today->You can do this too")]
 
-OVERDUE_TASKS_SORT_BY_OPTIONS = [('{"fields": ["priority", "finishDate", "name"], "orders": ["asc", "asc", "asc"]}', 'priority, finishDate, name'),
-                                 ('{"fields": ["priority", "finishDate", "name"], "orders": ["asc", "desc", "asc"]}', 'priority, -finishDate, name')]
+OVERDUE_TASKS_SORT_BY_OPTIONS = [('{"fields": ["priority", "finishDate", "finishTime", "name"], '
+                                  '"orders": ["asc", "asc", "asc", "asc"]}', 'priority, finishDate, name'),
+                                 ('{"fields": ["priority", "finishDate", "finishTime", "name"], '
+                                  '"orders": ["asc", "desc", "desc", "asc"]}', 'priority, -finishDate, name')]
 
-FUTURE_TASKS_SORT_BY_OPTIONS = [('{"fields": ["finishDate", "finishTime", "name"], "orders": ["desc", "asc", "asc"]}', 'finishDate, finishTime, name'),
-                                ('{"fields": ["finishDate", "finishTime", "name"], "orders": ["asc", "desc", "asc"]}', '-finishDate, finishTime, name')]
+FUTURE_TASKS_SORT_BY_OPTIONS = [('{"fields": ["finishDate", "finishTime", "name"], '
+                                 '"orders": ["desc", "asc", "asc"]}', 'finishDate, finishTime, name'),
+                                ('{"fields": ["finishDate", "finishTime", "name"], '
+                                 '"orders": ["asc", "desc", "asc"]}', '-finishDate, finishTime, name')]
 
 
 class User(AbstractBaseUser):
