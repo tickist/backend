@@ -91,7 +91,7 @@ class ChangeUserDetailsForm(forms.ModelForm):
         model = User
         fields = ("username", "email", "daily_summary_hour", "removes_me_from_shared_list",
                   "shares_list_with_me", "assigns_task_to_me", "completes_task_from_shared_list",
-                  "changes_task_from_shared_list_that_is_assigned_to_me",
+                  "changes_task_from_shared_list_that_is_assigned_to_me", "all_tasks_view",
                   "changes_task_from_shared_list_that_i_assigned_to_him_her", "leaves_shared_list",
                   "default_task_view_today_view", "default_task_view_overdue_view", "default_task_view_future_view",
                   "default_task_view_tags_view", "default_task_view", "overdue_tasks_sort_by", "future_tasks_sort_by")

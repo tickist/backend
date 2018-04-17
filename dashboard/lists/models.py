@@ -53,12 +53,12 @@ class List(MPTTModel):
     color = models.CharField(default=settings.DEFAULT_COLOR_LIST, max_length=100)
     is_active = models.BooleanField(default=True)
     dialog_time_when_task_finished = models.BooleanField(default=False)
-    #list rules
+    #project rules
     default_priority = models.CharField(choices=choices_priority, default="C", max_length=1)
     default_finish_date = models.IntegerField(choices=choices_default_finish_date, null=True, blank=True)
     default_type_finish_date = models.IntegerField(choices=choices_type_finish_date, null=True, blank=True,
                                                    default=choices_type_finish_date[1][0])
-    default_task_view = models.CharField(max_length=40, choices=DEFAULT_TASK_VIEW, default=DEFAULT_TASK_VIEW[0][0])
+    task_view = models.CharField(max_length=40, choices=DEFAULT_TASK_VIEW, default=DEFAULT_TASK_VIEW[0][0])
 
     class MPTTMeta:
         parent_attr = "ancestor"

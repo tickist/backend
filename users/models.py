@@ -65,6 +65,7 @@ class User(AbstractBaseUser):
     order_tasks_dashboard = models.CharField(max_length=40, choices=ORDER_TASKS_DASHBOARD,
                                              default="Today->Overdue->You can do this too")
     default_task_view = models.CharField(max_length=40, choices=DEFAULT_TASK_VIEW, default='extended')
+    all_tasks_view = models.CharField(max_length=40, choices=DEFAULT_TASK_VIEW, default='simple')
     default_task_view_today_view = models.CharField(max_length=40, choices=DEFAULT_TASK_VIEW, default='extended')
     default_task_view_overdue_view = models.CharField(max_length=40, choices=DEFAULT_TASK_VIEW, default='extended')
     default_task_view_future_view = models.CharField(max_length=40, choices=DEFAULT_TASK_VIEW, default='simple')

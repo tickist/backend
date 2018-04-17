@@ -18,7 +18,7 @@ class ListSerializer(serializers.ModelSerializer):
         fields = ("id", "name", "description", "logo", "owner", "is_inbox", "share_with", "ancestor", "creation_date",
                   "modification_date", "color", "is_active", "default_priority", "default_finish_date",
                   "default_type_finish_date", "tasks_counter", "task_finish_date", "lists", "share_with", "tags",
-                  "level", "get_all_descendants", "default_task_view", "dialog_time_when_task_finished")
+                  "level", "get_all_descendants", "task_view", "dialog_time_when_task_finished")
 
     def get_descendant(self, obj):
         request = self.context['request'] if 'request' in self.context else None
