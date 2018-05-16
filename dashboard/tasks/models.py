@@ -81,7 +81,7 @@ class Task(models.Model):
     """
     Model for tasks
     """
-    name = models.CharField(max_length=200)
+    name = models.CharField(max_length=500)
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="owner", on_delete=models.DO_NOTHING)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="author", on_delete=models.DO_NOTHING)
     priority = models.CharField(choices=choices_priority, default="C", db_index=True, max_length=1)
