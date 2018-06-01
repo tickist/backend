@@ -75,6 +75,8 @@ class User(AbstractBaseUser):
                                              default=OVERDUE_TASKS_SORT_BY_OPTIONS[0][0])
     future_tasks_sort_by = models.CharField(max_length=100, choices=FUTURE_TASKS_SORT_BY_OPTIONS,
                                             default=FUTURE_TASKS_SORT_BY_OPTIONS[0][0])
+    projects_filter_id = models.IntegerField(default=1)
+    tags_filter_id = models.IntegerField(default=1)
     USERNAME_FIELD = 'email'
 
     REQUIRED_FIELDS = []
