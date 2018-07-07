@@ -1,5 +1,5 @@
 #-*- coding: utf-8 -*-
-
+import datetime
 from django.db import models
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
@@ -244,12 +244,19 @@ class Message(models.Model):
 
 @receiver(post_save, sender=User)
 @disable_for_loaddata
-def creating_inbox_after_user_save(sender, instance, created, *args, **kwargs):
+def creating_inbox_tasks_tags_after_user_save(sender, instance, created, *args, **kwargs):
     if created:
         from django.utils.translation import ugettext as _
+        from dashboard.tasks.models import Task, Tag
+        for name in [_("work"), _("home"), _("need focus"), _("someday/maybe"), _("tasks for later"),
+                     _('quick tasks'), _('getting to know Tickist')]:
+            try:
+                Tag.objects.get(name=name, author=instance)
+            except Tag.DoesNotExist:
+                Tag(name=name, author=instance).save()
         list_name = _("Inbox")
         try:
-             List.objects.get(name=list_name, owner=instance)
+             project = List.objects.get(name=list_name, owner=instance)
         except List.DoesNotExist:
             project = List()
             project.name = list_name
@@ -257,19 +264,27 @@ def creating_inbox_after_user_save(sender, instance, created, *args, **kwargs):
             project.is_inbox = True
             project.save()
             project.share_with.add(instance)
+        task1 = Task()
+        task1.name = ('Find out more about Tickist')
+        task1.author = instance
+        task1.owner = instance
+        task1.finish_date = datetime.datetime.now().strftime('%d-%m-%Y')
+        task1.task_list = project
+        task1.estimate_time = 5
+        task1.save()
+        task1.tags.add(Tag.objects.get(name = _('getting to know Tickist'), author=instance))
+        task1.tags.add(Tag.objects.get(name = _('quick tasks'), author=instance))
 
-
-@receiver(post_save, sender=User)
-@disable_for_loaddata
-def creating_tags_after_user_create(sender, instance, created, *args, **kwargs):
-    if created:
-        #import loop
-        from dashboard.tasks.models import Tag
-        for name in [_("work"), _("home"), _("need focus"), _("someday/maybe"), _("tasks for later")]:
-            try:
-                Tag.objects.get(name=name, author=instance)
-            except Tag.DoesNotExist:
-                Tag(name=name, author=instance).save()
+        task2 = Task()
+        task2.name = ('Find out more about editing tasks')
+        task2.author = instance
+        task2.owner = instance
+        task2.task_list = project
+        task2.finish_date = datetime.datetime.now().strftime('%d-%m-%Y')
+        task2.estimate_time = 5
+        task2.save()
+        task2.tags.add(Tag.objects.get(name=_('getting to know Tickist'), author=instance))
+        task2.tags.add(Tag.objects.get(name=_('quick tasks'), author=instance))
 
 
 @receiver(post_save, sender=User)

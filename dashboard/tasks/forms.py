@@ -25,6 +25,7 @@ class TaskCreateForm(CreateModelForm, ValidationTimeMixin):
         exclude = ["modification_date"]
 
     def __init__(self, data, *args, **kwargs):
+        tags = []
         data['task_list'] = data['task_project']
         if 'finish_date' in data and data['finish_date']:
             data.update(
@@ -33,6 +34,13 @@ class TaskCreateForm(CreateModelForm, ValidationTimeMixin):
             data.update({"owner": data['owner']['id']})
         if 'task_list' in data and isinstance(data['task_list'], dict):
             data.update({"task_list": data['task_list']['id']})
+
+        if 'tags' in data:
+            for tag in data['tags']:
+                if isinstance(tag, dict):
+                    tag = tag['id']
+                tags.append(tag)
+        data.update({"tags": tags})
         super(TaskCreateForm, self).__init__(data, *args, **kwargs)
 
 
