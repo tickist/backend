@@ -268,7 +268,7 @@ def creating_inbox_tasks_tags_after_user_save(sender, instance, created, *args, 
         task1.name = ('Find out more about Tickist')
         task1.author = instance
         task1.owner = instance
-        task1.finish_date = datetime.datetime.now().strftime('%d-%m-%Y')
+        task1.finish_date = datetime.datetime.now().strftime('%Y-%m-%d')
         task1.task_list = project
         task1.estimate_time = 5
         task1.save()
@@ -280,7 +280,7 @@ def creating_inbox_tasks_tags_after_user_save(sender, instance, created, *args, 
         task2.author = instance
         task2.owner = instance
         task2.task_list = project
-        task2.finish_date = datetime.datetime.now().strftime('%d-%m-%Y')
+        task2.finish_date = datetime.datetime.now().strftime('%Y-%m-%d')
         task2.estimate_time = 5
         task2.save()
         task2.tags.add(Tag.objects.get(name=_('getting to know Tickist'), author=instance))
