@@ -76,6 +76,9 @@ class TaskStatistics(models.Model):
         statistics.tasks_counter = F('tasks_counter') + delta_tasks
         statistics.save()
 
+    def __str__(self):
+        return self.user.username + ' ' + self.date.strftime("%d-%m-%Y")
+
 
 class Task(models.Model):
     """
@@ -94,7 +97,7 @@ class Task(models.Model):
     modification_date = models.DateTimeField(editable=False, auto_now=True)
     finish_date = models.DateField(null=True, blank=True)
     finish_time = models.TimeField(null=True, blank=True)
-    type_finish_date = models.IntegerField(choices=choices_type_finish_date, null=True, blank=True)
+    type_finish_date = models.IntegerField(choices=choices_type_finish_date, null=True, blank=True, default=1)
     percent = models.IntegerField(default=0)
     repeat = models.IntegerField(choices=choices_repeat_for_model, default=0)
     repeat_delta = models.IntegerField(default=1)
