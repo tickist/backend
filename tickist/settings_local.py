@@ -55,7 +55,7 @@ CACHES = {
     }
 }
 
-ALLOWED_HOSTS = ['www.tickist.com', 'tickist.com', 'localhost']
+ALLOWED_HOSTS = ['www.tickist.com', 'tickist.com', 'localhost', 'app.tickist.com']
 SOCIAL_AUTH_REDIRECT_IS_HTTPS = False
 
 def custom_show_toolbar(request):
