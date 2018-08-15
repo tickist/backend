@@ -118,7 +118,7 @@ STATICFILES_DIRS = (
     )
 
 
-ALLOWED_HOSTS = ['www.tickist.com', 'tickist.com', 'localhost']
+ALLOWED_HOSTS = ['www.tickist.com', 'tickist.com', 'localhost', 'www.app.tickist.com', 'app.tickist.com']
 
 
 # List of finder classes that know how to find static files in
@@ -308,7 +308,7 @@ LOGGING = {
 }
 
 
-DOMAIN = "https://tickist.com"
+DOMAIN = "https://app.tickist.com"
 
 #South
 SOUTH_TESTS_MIGRATE = False  # we shouldn't use SOUTH in tests
