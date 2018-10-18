@@ -16,6 +16,6 @@ class UpdateListMixin(object):
             "share_with": list(map( lambda x: {'id': str(x)}, list_obj.share_with.all().values_list("id", flat=True))),
             "default_priority": "C",
             "is_active": list_obj.is_active,
-            "default_task_view": list_obj.default_task_view
+            "task_view": list_obj.task_view
         }
         return dictionary

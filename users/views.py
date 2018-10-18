@@ -232,7 +232,7 @@ def auth_by_token(request, backend):
     user=request.user
     user = backend.do_auth(
         access_token=request.data.get('access_token'),
-        user=user.is_authenticated() and user or None
+        user=user.is_authenticated and user or None
         )
     if user and user.is_active:
         return user# Return anything that makes sense here

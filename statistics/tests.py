@@ -65,22 +65,22 @@ class DayStatisticsTest(TestCase):
         tag1 = [tag for tag in result['tags'] if tag['name'] == 'Tag {}'.format(self.tag1_name)][0]
         tag2 = [tag for tag in result['tags'] if tag['name'] == 'Tag {}'.format(self.tag2_name)][0]
         tag3 = [tag for tag in result['tags'] if tag['name'] == 'Tag {}'.format(self.tag3_name)][0]
-        self.assertEqual(result['estimate_time']['value'], 31+45+63+92+54+12)
-        self.assertEqual(result['tasks_count']['value'], 6)
+        self.assertEqual(result['estimate_time']['value'], 31+45+63+92+54+12+10)
+        self.assertEqual(result['tasks_count']['value'], 8)
         self.assertEqual(result['priorities'][0]['time'], 31+45) #priority A
         self.assertEqual(result['priorities'][0]['count'], 2)
         self.assertEqual(result['priorities'][1]['time'], 63+92) #priority B
         self.assertEqual(result['priorities'][1]['count'], 2)
-        self.assertEqual(result['priorities'][2]['time'], 54+12) #priority C
-        self.assertEqual(result['priorities'][2]['count'], 2)
+        self.assertEqual(result['priorities'][2]['time'], 54+12+10) #priority C
+        self.assertEqual(result['priorities'][2]['count'], 4)
         self.assertEqual(tag1['time'], 31+45)
         self.assertEqual(tag1['count'], 2)
         self.assertEqual(tag2['time'], 63+92)
         self.assertEqual(tag2['count'], 2)
         self.assertEqual(tag3['time'], 31+45)
         self.assertEqual(tag3['count'], 2)
-        self.assertEqual(result['lists'][0]['time'], 31+45+63+92+54+12)
-        self.assertEqual(result['lists'][0]['count'], 6)
+        self.assertEqual(result['lists'][1]['time'], 31+45+63+92+54+12)
+        self.assertEqual(result['lists'][1]['count'], 6)
 
 
     def test_statistics_day_user_choose_a_date(self):
@@ -106,8 +106,8 @@ class DayStatisticsTest(TestCase):
         self.assertEqual(tag2['count'], 2)
         self.assertEqual(tag3['time'], 31+45)
         self.assertEqual(tag3['count'], 2)
-        self.assertEqual(result['lists'][0]['time'], 34+42+61)
-        self.assertEqual(result['lists'][0]['count'], 3)
+        self.assertEqual(result['lists'][1]['time'], 34+42+61+20)
+        self.assertEqual(result['lists'][1]['count'], 3)
 
     def test_statistics_day_with_pinned_tasks(self):
         TaskWithTagsAndStepsFactory.create(priority='A', estimate_time=31, finish_date=date.today() + timedelta(4),
@@ -123,22 +123,22 @@ class DayStatisticsTest(TestCase):
         tag1 = [tag for tag in result['tags'] if tag['name'] == 'Tag {}'.format(self.tag1_name)][0]
         tag2 = [tag for tag in result['tags'] if tag['name'] == 'Tag {}'.format(self.tag2_name)][0]
         tag3 = [tag for tag in result['tags'] if tag['name'] == 'Tag {}'.format(self.tag3_name)][0]
-        self.assertEqual(result['estimate_time']['value'], 31+45+63+92+54+12+45+31)
-        self.assertEqual(result['tasks_count']['value'], 8)
+        self.assertEqual(result['estimate_time']['value'], 31+45+63+92+54+12+45+31+10)
+        self.assertEqual(result['tasks_count']['value'], 10)
         self.assertEqual(result['priorities'][0]['time'], 31+45+45+31) #priority A
         self.assertEqual(result['priorities'][0]['count'], 4)
         self.assertEqual(result['priorities'][1]['time'], 63+92) #priority B
         self.assertEqual(result['priorities'][1]['count'], 2)
-        self.assertEqual(result['priorities'][2]['time'], 54+12) #priority C
-        self.assertEqual(result['priorities'][2]['count'], 2)
+        self.assertEqual(result['priorities'][2]['time'], 54+12+10) #priority C
+        self.assertEqual(result['priorities'][2]['count'], 4)
         self.assertEqual(tag1['time'], 31+45+31+45)
         self.assertEqual(tag1['count'], 4)
         self.assertEqual(tag2['time'], 63+92)
         self.assertEqual(tag2['count'], 2)
         self.assertEqual(tag3['time'], 31+45+31+45)
         self.assertEqual(tag3['count'], 4)
-        self.assertEqual(result['lists'][0]['time'], 31+45+63+92+54+12+31+45)
-        self.assertEqual(result['lists'][0]['count'], 8)
+        self.assertEqual(result['lists'][1]['time'], 31+45+63+92+54+12+31+45)
+        self.assertEqual(result['lists'][1]['count'], 8)
 
 
 

@@ -130,7 +130,7 @@ STATICFILES_FINDERS = (
 
 #TODO It is ugly
 if PRODUCTION:
-    MIDDLEWARE_CLASSES = (
+    MIDDLEWARE = (
         'django.middleware.gzip.GZipMiddleware',
         'django.middleware.locale.LocaleMiddleware',
         'corsheaders.middleware.CorsMiddleware',
@@ -146,12 +146,12 @@ if PRODUCTION:
 
     )
 else:
-    MIDDLEWARE_CLASSES = (
-       # 'debug_panel.middleware.DebugPanelMiddleware',
+    MIDDLEWARE = (
         'django.middleware.locale.LocaleMiddleware',
         'corsheaders.middleware.CorsMiddleware',
         'django.middleware.common.CommonMiddleware',
         'django.contrib.sessions.middleware.SessionMiddleware',
+        # 'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
         'django.middleware.csrf.CsrfViewMiddleware',
         'django.contrib.auth.middleware.AuthenticationMiddleware',
         'django.contrib.messages.middleware.MessageMiddleware',
@@ -165,14 +165,6 @@ SECRET_KEY = os.environ.get("SECRET_KEY", "tickist_secret_key")
 
 LOGIN_URL = "/#login"
 
-# List of callables that know how to import templates from various sources.
-# TEMPLATE_LOADERS = (
-#     ('django.template.loaders.cached.Loader', (
-#     'django.template.loaders.filesystem.Loader',
-#     'django.template.loaders.app_directories.Loader',
-#     'django.template.loaders.eggs.Loader',
-#      )),
-# )
 
 TEMPLATES = [
     {
@@ -196,34 +188,10 @@ TEMPLATES = [
     },
 ]
 
-
-#
-# # Context processors
-# TEMPLATE_CONTEXT_PROCESSORS = (
-#     'commons.utils.custom_proc',
-#     'django.contrib.auth.context_processors.auth',
-#     'django.core.context_processors.debug',
-#     'django.core.context_processors.i18n',
-#     'django.core.context_processors.media',
-#     'django.core.context_processors.static',
-#     'django.core.context_processors.request',
-#     'django.contrib.messages.context_processors.messages',
-#     'social.apps.django_app.context_processors.backends',
-#     'social.apps.django_app.context_processors.login_redirect',
-# )
-
-
 ROOT_URLCONF = 'tickist.urls'
 
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'tickist.wsgi.application'
-
-# TEMPLATE_DIRS = (
-#     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
-#     # Always use forward slashes, even on Windows.
-#     # Don't forget to use absolute paths, not relative paths.
-#     os.path.join(PROJECT_ROOT, 'templates'),
-# )
 
 INSTALLED_APPS = (
     'django.contrib.auth',
@@ -268,6 +236,7 @@ EXTERNAL_APPS = (
     'corsheaders',
     'django_celery_results',
     'django_celery_beat',
+    'dbbackup'
 )
 
 INSTALLED_APPS += MY_APPS
@@ -360,7 +329,6 @@ AUTH_USER_MODEL = 'users.User'
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAuthenticated',),
-    # 'DEFAULT_CONTENT_NEGOTIATION_CLASS': 'commons.utils.IgnoreClientContentNegotiation',
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.BasicAuthentication',
@@ -515,6 +483,16 @@ JWT_AUTH = {
 }
 
 
+DBBACKUP_FILENAME_TEMPLATE = 'ticksist-dump-database-{datetime}.{extension}'
+
+if PRODUCTION:
+    DBBACKUP_STORAGE = 'storages.backends.dropbox.DropBoxStorage'
+    DBBACKUP_STORAGE_OPTIONS = {
+        'oauth2_access_token': get_env_variable('DROPBOX_OAUTH2_ACCESS_TOKEN'),
+    }
+else:
+    DBBACKUP_STORAGE = 'django.core.files.storage.FileSystemStorage'
+    DBBACKUP_STORAGE_OPTIONS = {'location': '/var/backups/'}
 
 try:
     from settings_local import *

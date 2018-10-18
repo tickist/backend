@@ -244,19 +244,11 @@ class Task(models.Model):
         old_task = None
         if self.id:
             # if we create the task than self.id is None
-            # import ipdb;ipdb.set_trace()
             old_task = Task.objects.get(id=self.id)
             is_status_change = old_task.status != self.status
             is_estimate_time_change = old_task.estimate_time != self.estimate_time
             is_time_change = old_task.time != self.time
-            # print "#####"
-            # print "is status change %s" % is_status_change
-            # print "is_estimata_time_change %s" % is_estimate_time_change
-            # print "is_time_change %s" % is_time_change
-            # print "time %s" % self.time
-            # print "old time %s" % old_task.time
-            # print "$$$$$$"
-            # import ipdb;ipdb.set_trace()
+
             if is_status_change and not is_estimate_time_change and not is_time_change:
 
                 if old_task.status == 0 and self.status == 1:
@@ -265,6 +257,7 @@ class Task(models.Model):
                                                   spend_time=zero_or_number(self.time))
                     if self.repeat > 0:
                         self.repeting_task()
+
                     self.when_complete = timezone.now()
                 if old_task.status == 1 and self.status == 0:
                     TaskStatistics.add_statistics(user=self.owner, delta_tasks=-1,

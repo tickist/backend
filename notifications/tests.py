@@ -22,6 +22,7 @@ from dashboard.tasks.tests.mixins import UpdateTaskMixin
 class DailySummaryTestCase(TestCase):
 
     def setUp(self):
+        # @TODO create static timezone object
         self.user = UserFactory.create(is_staff=True, daily_summary_hour=timezone.now() + timezone.timedelta(minutes=1))
         self.yesterday = timezone.now() - timedelta(days=1)
         self.today = timezone.now()

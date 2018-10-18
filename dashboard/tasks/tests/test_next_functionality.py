@@ -137,7 +137,7 @@ class TasksPostponeToTodayTestCase(TestCase):
                                status=0, priority="A", task_list=self.list_1)
 
     def test_postpone_tasks(self):
-        self.assertEqual(Task.objects.filter(owner=self.user, finish_date=date.today()).count(), 3)
+        self.assertEqual(Task.objects.filter(owner=self.user, finish_date=date.today()).count(), 5)
         response = self.client.post(self.url, {}, follow=True, content_type='application/json' )
-        self.assertEqual(Task.objects.filter(owner=self.user, finish_date=date.today()).count(), 10)
+        self.assertEqual(Task.objects.filter(owner=self.user, finish_date=date.today()).count(), 12)
         self.assertEqual(response.status_code, status.HTTP_200_OK)

@@ -185,7 +185,10 @@ class TaskFromListTeamMateFiltersTest(TestCase):
 
         response = self.client.get(self.url, {"o": "priority", "assign": "all"}, follow=True,
                                    content_type='application/json')
-        tasks_from_database = Task.objects.filter(owner__pk__in=self.user1.all_team_mates_and_self()).order_by("priority")
+        tasks_from_database = Task.objects.filter(owner__pk__in=self.user1.all_team_mates_and_self())\
+            .exclude(task_list__in=[self.user2.inbox_pk, self.user3.inbox_pk])\
+            .order_by("priority")
+
         self._checking_tasks_list(response, tasks_from_database)
 
     def test_users_tasks(self):
@@ -198,7 +201,9 @@ class TaskFromListTeamMateFiltersTest(TestCase):
         # from all lists
         response = self.client.get(self.url, {"o": "priority", "assign": self.user2.pk}, follow=True,
                                    content_type='application/json')
-        tasks_from_database = Task.objects.filter(owner=self.user2).order_by("priority")
+        tasks_from_database = Task.objects.filter(owner=self.user2)\
+            .exclude(task_list__in=[self.user2.inbox_pk, self.user3.inbox_pk])\
+            .order_by("priority")
         self._checking_tasks_list(response, tasks_from_database)
 
         # from list
@@ -210,7 +215,9 @@ class TaskFromListTeamMateFiltersTest(TestCase):
         # from all lists
         response = self.client.get(self.url, {"o": "priority", "assign": self.user3.pk}, follow=True,
                                    content_type='application/json')
-        tasks_from_database = Task.objects.filter(owner=self.user3).order_by("priority")
+        tasks_from_database = Task.objects.filter(owner=self.user3) \
+            .exclude(task_list__in=[self.user2.inbox_pk, self.user3.inbox_pk])\
+            .order_by("priority")
         self._checking_tasks_list(response, tasks_from_database)
 
     def test_my_tasks(self):
@@ -270,7 +277,7 @@ class SuspendTaskTest(TestCase):
         response = self.client.get(self.url, {"o": "priority", "assign": str(self.user1.pk), "status": "0"},
                                    follow=True, content_type='application/json')
         result = json.loads(response.content.decode('utf-8'))
-        self.assertEqual(len(result), 5)
+        self.assertEqual(len(result), 7)
 
 
 class FilteredTaskByTags(TestCase):
@@ -413,14 +420,14 @@ class DuedateAndEstimateTimeFilters(TestCase):
                                    follow=True, content_type='application/json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         result = json.loads(response.content.decode('utf-8'))
-        self.assertEqual(len(result), 14)
+        self.assertEqual(len(result), 16)
 
     def test_filter_estimate_time(self):
         response = self.client.get(self.url, {"o": "priority", "estimate_time__lt": "30"},
                                    follow=True, content_type='application/json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         result = json.loads(response.content.decode('utf-8'))
-        self.assertEqual(len(result), 10)
+        self.assertEqual(len(result), 12)
 
         response = self.client.get(self.url, {"o": "priority", "estimate_time__gt": "30", "estimate_time__lt": "150"},
                                    follow=True, content_type='application/json')

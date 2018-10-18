@@ -3,7 +3,7 @@ import datetime
 from django.db import models
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
-from django.contrib.auth.models import AbstractBaseUser, UserManager
+from django.contrib.auth.models import AbstractBaseUser, UserManager, AbstractUser
 from django.conf import settings
 from django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -22,8 +22,8 @@ def get_path(user, name):
     dir = "users/%d/%s" % (name[0], polish_string(name[1]))
     return dir
 
-ORDER_TASKS_DASHBOARD = [('Today->Overdue->You can do this too', "Today->Overdue->You can do this too"),
-                         ("Overdue->Today->You can do this too", "Overdue->Today->You can do this too")]
+ORDER_TASKS_DASHBOARD = [('Today->Overdue', "Today->Overdue"),
+                         ("Overdue->Today", "Overdue->Today")]
 
 OVERDUE_TASKS_SORT_BY_OPTIONS = [('{"fields": ["priority", "finishDate", "finishTime", "name"], '
                                   '"orders": ["asc", "asc", "asc", "asc"]}', 'priority, finishDate, name'),
@@ -32,11 +32,13 @@ OVERDUE_TASKS_SORT_BY_OPTIONS = [('{"fields": ["priority", "finishDate", "finish
 
 FUTURE_TASKS_SORT_BY_OPTIONS = [('{"fields": ["finishDate", "finishTime", "name"], '
                                  '"orders": ["desc", "asc", "asc"]}', 'finishDate, finishTime, name'),
+                                 ('{"fields": ["priority", "finishDate", "finishTime", "name"], '
+                                 '"orders": ["asc", "desc", "asc", "asc"]}', 'priority, finishDate, finishTime, name'),
                                 ('{"fields": ["finishDate", "finishTime", "name"], '
                                  '"orders": ["asc", "desc", "asc"]}', '-finishDate, finishTime, name')]
 
 
-class User(AbstractBaseUser):
+class User(AbstractUser):
     """
         Moja klasa użytkownika
     """
@@ -63,7 +65,7 @@ class User(AbstractBaseUser):
     deletes_list_shared_with_me = models.BooleanField(default=True)
     #options
     order_tasks_dashboard = models.CharField(max_length=40, choices=ORDER_TASKS_DASHBOARD,
-                                             default="Today->Overdue->You can do this too")
+                                             default="Today->Overdue")
     default_task_view = models.CharField(max_length=40, choices=DEFAULT_TASK_VIEW, default='extended')
     all_tasks_view = models.CharField(max_length=40, choices=DEFAULT_TASK_VIEW, default='simple')
     default_task_view_today_view = models.CharField(max_length=40, choices=DEFAULT_TASK_VIEW, default='extended')
@@ -73,10 +75,11 @@ class User(AbstractBaseUser):
     dialog_time_when_task_finished_in_project = models.BooleanField(default=False)
     overdue_tasks_sort_by = models.CharField(max_length=100, choices=OVERDUE_TASKS_SORT_BY_OPTIONS,
                                              default=OVERDUE_TASKS_SORT_BY_OPTIONS[0][0])
-    future_tasks_sort_by = models.CharField(max_length=100, choices=FUTURE_TASKS_SORT_BY_OPTIONS,
+    future_tasks_sort_by = models.CharField(max_length=200, choices=FUTURE_TASKS_SORT_BY_OPTIONS,
                                             default=FUTURE_TASKS_SORT_BY_OPTIONS[0][0])
     projects_filter_id = models.IntegerField(default=1)
     tags_filter_id = models.IntegerField(default=1)
+    is_authenticated = True
     USERNAME_FIELD = 'email'
 
     REQUIRED_FIELDS = []
@@ -134,6 +137,10 @@ class User(AbstractBaseUser):
             Function returns all primary keys users list
         """
         return List.objects.prefetch_related("share_with").filter(share_with=self, is_active=True).values_list("id", flat=True)
+
+    @property
+    def active(self):
+        return self.is_active
 
     @property
     def inbox_pk(self):

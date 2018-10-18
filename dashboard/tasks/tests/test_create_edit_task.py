@@ -37,7 +37,7 @@ class CreateTaskTest(TestCase):
         response = self.client.post(url, json.dumps({"name": task_name, 'task_project': self.john.inbox_pk}), follow=True,
                                     content_type='application/json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        task = Task.objects.get(id=1)
+        task = Task.objects.get(id=response.data['id'])
         self.assertEqual(task.owner.pk, self.john.pk)
         self.assertEqual(task.name, task_name)
         self.assertEqual(task.percent, 0)
@@ -53,7 +53,7 @@ class CreateTaskTest(TestCase):
         response = self.client.post(url, json.dumps({"name": task_name, 'task_project': self.john.inbox_pk, 'steps':[]}), follow=True,
                                     content_type='application/json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        task = Task.objects.get(id=1)
+        task = Task.objects.get(id=response.data['id'])
         self.assertEqual(task.owner.pk, self.john.pk)
         self.assertEqual(task.name, task_name)
         self.assertEqual(task.percent, 0)
@@ -75,7 +75,7 @@ class CreateTaskTest(TestCase):
         self.assertEqual(task.owner.pk, self.john.pk)
         self.assertEqual(task.name, task_name)
         self.assertEqual(task.percent, 0)
-        self.assertEqual(task.type_finish_date, 0)
+        self.assertEqual(task.type_finish_date, 1)
         self.assertEqual(task.estimate_time, task_estimate_time)
         self.assertEqual(task.priority, "C")
         self.assertEqual(task.task_list.pk, 1)
@@ -565,7 +565,7 @@ class CreateTaskWithSteps(TestCase):
                                                      u'ancestor': None, u"steps": steps}
                 ), follow=True, content_type='application/json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        task = Task.objects.get(id=1)
+        task = Task.objects.get(id=response.data['id'])
         self.assertEqual(task.owner.pk, self.john.pk)
         self.assertEqual(task.name, task_name)
         self.assertEqual(task.percent, 0)
@@ -584,7 +584,7 @@ class EditTaskWithSteps(TestCase):
         self.client = Client(enforce_csrf_checks=False)
         self.assertTrue(self.client.login(email=self.john.email, password="pass"))
         for _ in range(1):
-            TaskWithStepsFactory.create(task_list=List.objects.get(id=self.john.inbox_pk), owner=self.john,
+            self.task1 = TaskWithStepsFactory.create(task_list=List.objects.get(id=self.john.inbox_pk), owner=self.john,
                                         author=self.john, finish_date=None)
 
     def _update_task(self, task, steps):
@@ -617,14 +617,14 @@ class EditTaskWithSteps(TestCase):
         return steps
       
     def test_change_status_and_name_steps(self):
-        task = Task.objects.get(id=1)
+        task = Task.objects.get(id=self.task1.id)
         steps = self._create_steps_dict(task)
         steps.update({'steps-3-status': u"1"})
         steps.update({'steps-4-status': u"1"})
         steps.update({'steps-3-name': u"NEW NAME"})
         steps.update({'steps-4-name': u"NEW NAME"})
         response = self._update_task(task, steps)
-        task = Task.objects.get(id=1)
+        task = Task.objects.get(id=self.task1.id)
 
         step3 = TaskStep.objects.get(id=steps["steps-3-id"])
         step4 = TaskStep.objects.get(id=steps["steps-4-id"])
@@ -636,14 +636,14 @@ class EditTaskWithSteps(TestCase):
         self.assertEqual(TaskStep.objects.filter(task=task).count(), 5)
 
     def test_edit_steps_errors(self):
-        task = Task.objects.get(id=1)
+        task = Task.objects.get(id=self.task1.id)
         steps = self._create_steps_dict(task)
         steps.update({'steps-3-status': u""})
         steps.update({'steps-4-status': u"1"})
         steps.update({'steps-3-name': u"NEW NAME"})
         steps.update({'steps-4-name': u"NEW NAME"})
         response = self._update_task(task, steps)
-        task = Task.objects.get(id=1)
+        task = Task.objects.get(id=self.task1.id)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(TaskStep.objects.filter(task=task).count(), 5)
         steps = self._create_steps_dict(task)
@@ -652,13 +652,13 @@ class EditTaskWithSteps(TestCase):
         steps.update({'steps-3-name': u""})
         steps.update({'steps-4-name': u"NEW NAME"})
         response = self._update_task(task, steps)
-        task = Task.objects.get(id=1)
+        task = Task.objects.get(id=self.task1.id)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         #nothing change
         self.assertEqual(TaskStep.objects.filter(task=task).count(), 5)
 
     def test_add_new_steps(self):
-        task = Task.objects.get(id=1)
+        task = Task.objects.get(id=self.task1.id)
         self.assertEqual(TaskStep.objects.filter(task=task).count(), 5)
         steps = self._create_steps_dict(task)
         steps['steps-5-name'] = u"New step"
@@ -667,33 +667,33 @@ class EditTaskWithSteps(TestCase):
         steps['steps-5-task'] = task.id
         steps.update({'steps-TOTAL_FORMS': 6})
         response = self._update_task(task, steps)
-        task = Task.objects.get(id=1)
+        task = Task.objects.get(id=self.task1.id)
         step6 = TaskStep.objects.get(id=6)
         self.assertEqual(TaskStep.objects.filter(task=task).count(), 6)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(step6.status, 0)
-        self.assertEqual(step6.task.id, 1)
+        self.assertEqual(step6.task.id, self.task1.id)
         self.assertEqual(step6.name, "New step")
 
     def test_delete_new_steps(self):
-        task = Task.objects.get(id=1)
+        task = Task.objects.get(id=self.task1.id)
         self.assertEqual(TaskStep.objects.filter(task=task).count(), 5)
         steps = self._create_steps_dict(task)
         steps['steps-3-DELETE'] = "steps-3-DELETE"
         response = self._update_task(task, steps)
-        task = Task.objects.get(id=1)
+        task = Task.objects.get(id=self.task1.id)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(TaskStep.objects.filter(task=task).count(), 4)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(TaskStep.objects.filter(id=steps['steps-3-id']).count(), 0)
 
     def test_change_percent_after_change_step_status(self):
-        task = Task.objects.get(id=1)
+        task = Task.objects.get(id=self.task1.id)
         steps = self._create_steps_dict(task)
         steps.update({'steps-3-status': u"1"})
         response = self._update_task(task, steps)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        task = Task.objects.get(id=1)
+        task = Task.objects.get(id=self.task1.id)
 
         step3 = TaskStep.objects.get(id=steps["steps-3-id"])
         self.assertEqual(step3.status, 1)
@@ -703,17 +703,17 @@ class EditTaskWithSteps(TestCase):
         steps.update({'steps-2-status': u"1"})
         response = self._update_task(task, steps)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        task = Task.objects.get(id=1)
+        task = Task.objects.get(id=self.task1.id)
         self.assertEqual(task.percent, 40)
 
         steps.update({'steps-3-status': u"0"})
         response = self._update_task(task, steps)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        task = Task.objects.get(id=1)
+        task = Task.objects.get(id=self.task1.id)
         self.assertEqual(task.percent, 20)
 
     def test_done_task_after_done_all_steps(self):
-        task = Task.objects.get(id=1)
+        task = Task.objects.get(id=self.task1.id)
         self.assertEqual(task.status, 0)
         steps = self._create_steps_dict(task)
         steps.update({'steps-0-status': u"1"})
@@ -722,14 +722,14 @@ class EditTaskWithSteps(TestCase):
         steps.update({'steps-3-status': u"1"})
         steps.update({'steps-4-status': u"1"})
         response = self._update_task(task, steps)
-        task = Task.objects.get(id=1)
+        task = Task.objects.get(id=self.task1.id)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(task.percent, 100)
         self.assertEqual(task.status, 1)
 
     def test_undone_task_after_undone_one_step(self):
         #prepare data
-        task = Task.objects.get(id=1)
+        task = Task.objects.get(id=self.task1.id)
         task.status = 1
         task.save()
         TaskStep.objects.all().update(status=1)
@@ -738,32 +738,32 @@ class EditTaskWithSteps(TestCase):
         steps.update({'steps-0-status': u"0"})
 
         response = self._update_task(task, steps)
-        task = Task.objects.get(id=1)
+        task = Task.objects.get(id=self.task1.id)
         self.assertEqual(task.status, 0)
 
     def test_done_all_steps_after_done_task(self):
-        task = Task.objects.get(id=1)
+        task = Task.objects.get(id=self.task1.id)
         task.status = 1
         response = self._update_task(task, self._create_steps_dict(task))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        task = Task.objects.get(id=1)
+        task = Task.objects.get(id=self.task1.id)
         for step in TaskStep.objects.filter(task=task):
             self.assertEqual(step.status, 1)
 
     def test_done_task_with_steps_with_repeating_options(self):
-        task = Task.objects.get(id=1)
+        task = Task.objects.get(id=self.task1.id)
         task.repeat = 2
         task.repeat_delta = 2
         task.from_repeating = 0
         task.save()
         TaskStep.objects.filter(task=task)[0].status = 1
         TaskStep.objects.filter(task=task)[0].save()
-        task = Task.objects.get(id=1)
+        task = Task.objects.get(id=self.task1.id)
         task.status = 1
         task.save()
         response = self._update_task(task, self._create_steps_dict(task))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        task = Task.objects.get(id=1)
+        task = Task.objects.get(id=self.task1.id)
         self.assertEqual(task.status, 0)
         for step in TaskStep.objects.filter(task=task):
             self.assertEqual(step.status, 0)
@@ -773,7 +773,7 @@ class EditTaskWithSteps(TestCase):
             Zmieniam wszystkie stepy na done wtedy zadanie i stepy powinny być na undone i
             zadanie powinno mieć nową datę ukończenia
         """
-        task = Task.objects.get(id=1)
+        task = Task.objects.get(id=self.task1.id)
         task.repeat = 2
         task.repeat_delta = 2
         task.from_repeating = 0
@@ -786,14 +786,14 @@ class EditTaskWithSteps(TestCase):
         steps.update({'steps-4-status': u"1"})
         response = self._update_task(task, steps)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        task = Task.objects.get(id=1)
+        task = Task.objects.get(id=self.task1.id)
         self.assertEqual(task.percent, 0)
-        task = Task.objects.get(id=1)
+        task = Task.objects.get(id=self.task1.id)
         for step in TaskStep.objects.filter(task=task):
             self.assertEqual(step.status, 0)
 
     def test_task_persent_set_to_zero_after_deleting_all_steps(self):
-        task = Task.objects.get(id=1)
+        task = Task.objects.get(id=self.task1.id)
         task.repeat = 2
         task.repeat_delta = 2
         task.from_repeating = 0
@@ -806,7 +806,7 @@ class EditTaskWithSteps(TestCase):
         steps['steps-4-DELETE'] = "steps-4-DELETE"
         response = self._update_task(task, steps)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        task = Task.objects.get(id=1)
+        task = Task.objects.get(id=self.task1.id)
         self.assertEqual(task.percent, 0)
 
 
@@ -833,7 +833,7 @@ class CreateTaskWithTagsTestCase(TestCase):
                                                      u'ancestor': None, u"tags": [1,2,3]}
                 ), follow=True, content_type='application/json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        task = Task.objects.get(id=1)
+        task = Task.objects.get(id=response.data['id'])
         self.assertEqual(task.owner.pk, self.john.pk)
         self.assertEqual(task.name, task_name)
         self.assertEqual(task.percent, 0)
