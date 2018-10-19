@@ -4,6 +4,8 @@ python:
 # command to install dependencies
 install:
   - pip install -r requirements.txt
+env:
+  - PRODUCTION=False
 # command to run tests
 script:
   - python manage.py test # or py.test for Python versions 3.5 and below

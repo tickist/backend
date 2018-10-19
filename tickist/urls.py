@@ -14,12 +14,35 @@ from users.views import  UserTagsViewSet
 from dashboard.lists.views import ListViewSet
 from users.views import UserViewSet
 from rest_framework.routers import DefaultRouter
-from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
+
+
 
 router = DefaultRouter()
 router.register(r'tag', UserTagsViewSet, base_name="tag")
 router.register(r'project', ListViewSet, base_name="list")
 router.register(r'user', UserViewSet)
+
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework_simplejwt.views import TokenObtainPairView
+
+class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user):
+        token = super(MyTokenObtainPairSerializer, cls).get_token(user)
+
+        # Add custom claims
+        token['user_id'] = user.id
+        # ...
+
+        return token
+
+class MyTokenObtainPairView(TokenObtainPairView):
+    serializer_class = MyTokenObtainPairSerializer
+
 
 sitemaps = {
     'static': StaticViewSitemap,
@@ -44,8 +67,8 @@ urlpatterns = [
     url('', include('social_django.urls', namespace='social')),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     #JOT
-    url(r'^api/api-token-auth/', obtain_jwt_token, name="api-token-auth"),
-    url(r'^api/api-token-refresh/', refresh_jwt_token, name="api-token-refresh"),
+    url(r'^api/api-token-auth/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
+    url(r'^api/api-token-refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     url(r'^sitemap\.xml$', sitemap,
         {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
     url(r'^api/', include(router.urls)),
