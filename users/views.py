@@ -27,11 +27,7 @@ from dashboard.tasks.models import Tag
 from dashboard.tasks.serializers import TagSerializer, SimpleTagSerializer
 from dashboard.tasks.forms import TagForm
 from commons.utils import send_email_to_admins, gen_passwd
-from rest_framework_jwt.settings import api_settings
 from calendar import timegm
-
-jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
-jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -258,7 +254,8 @@ class SocialLogin(APIView):
                     strategy = load_strategy(request=request)
                     _do_login(request.backend, user, UserSocialAuth.objects.get(user=user))
                     # JWT login
-                    payload = jwt_payload_handler(user)
+                    # @TODO Change it to the new JWT plugin
+                    #payload = jwt_payload_handler(user)
                     # Include original issued at time for a brand new token,
                     # to allow token refresh
                     if api_settings.JWT_ALLOW_REFRESH:
@@ -268,7 +265,8 @@ class SocialLogin(APIView):
 
                     user.backend = 'django.contrib.auth.backends.ModelBackend'
                     login(request, user)
-                    return Response({'token':jwt_encode_handler(payload), 'user_id': user.id}, status=status.HTTP_201_CREATED)
+                    return Response({'token': 'None', 'user_id': user.id}, status=status.HTTP_201_CREATED)
+                    #return Response({'token':jwt_encode_handler(payload), 'user_id': user.id}, status=status.HTTP_201_CREATED)
 
                 else:
                     return Response("Bad Credentials", status=403)
@@ -292,7 +290,8 @@ class SocialLogin(APIView):
                     strategy = load_strategy(request=request)
                     _do_login(request.backend, user, UserSocialAuth.objects.get(user=user))
                     # JWT login
-                    payload = jwt_payload_handler(user)
+                    # @TODO Change it to the new JWT plugin
+                    #payload = jwt_payload_handler(user)
                     # Include original issued at time for a brand new token,
                     # to allow token refresh
                     if api_settings.JWT_ALLOW_REFRESH:
@@ -302,6 +301,7 @@ class SocialLogin(APIView):
 
                     user.backend = 'django.contrib.auth.backends.ModelBackend'
                     login(request, user)
-                    return Response({'token':jwt_encode_handler(payload), 'user_id': user.id}, status=status.HTTP_201_CREATED)
+                    return Response({'token':'None', 'user_id': user.id}, status=status.HTTP_201_CREATED)
+                    #return Response({'token':jwt_encode_handler(payload), 'user_id': user.id}, status=status.HTTP_201_CREATED)
         else:
             return Response("Bad request", status=400)

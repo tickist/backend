@@ -1,6 +1,7 @@
 #-*- coding: utf-8 -*-
 from django.conf.urls import include, url
 from .sitemaps import StaticViewSitemap
+from django.utils.six import text_type
 from django.contrib.sitemaps.views import sitemap
 from django.conf import settings
 from django.conf.urls.static import static
@@ -29,16 +30,23 @@ router.register(r'user', UserViewSet)
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 
+
+
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
     def get_token(cls, user):
         token = super(MyTokenObtainPairSerializer, cls).get_token(user)
-
-        # Add custom claims
-        token['user_id'] = user.id
-        # ...
-
         return token
+
+    def validate(self, attrs):
+        data = super(TokenObtainPairSerializer, self).validate(attrs)
+        data['user_id'] = self.user.id
+        refresh = self.get_token(self.user)
+
+        data['refresh'] = text_type(refresh)
+        data['access'] = text_type(refresh.access_token)
+
+        return data
 
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
@@ -65,7 +73,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^robots\.txt', include('robots.urls')),
     url('', include('social_django.urls', namespace='social')),
-    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    #url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     #JOT
     url(r'^api/api-token-auth/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
     url(r'^api/api-token-refresh/', TokenRefreshView.as_view(), name='token_refresh'),

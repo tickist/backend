@@ -16,8 +16,7 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.reverse import reverse
 from rest_framework.response import Response
-from rest_framework_jwt.serializers import JSONWebTokenSerializer
-from rest_framework_jwt.settings import api_settings
+from django.utils.six import text_type
 from django.views.generic import TemplateView
 from django.views.generic.base import View
 from users.models import User
@@ -25,7 +24,7 @@ from users.serializers import UserSerializer
 from commons.utils import send_email_to_admins
 from .forms import SimpleCreateUserForm
 from emails.utils import async_send_email
-
+from rest_framework_simplejwt.tokens import RefreshToken, SlidingToken, UntypedToken
 
 class ConfirmEmailView(View):
 
@@ -104,13 +103,14 @@ class SimpleRegistrationView(generics.CreateAPIView):
             user.save()
             self.send_registration_email(self.request, user)
             # JWT login
-            jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
-            jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
+            #jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
+            #jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
 
-            payload = jwt_payload_handler(user)
-            token = jwt_encode_handler(payload)
+            #payload = jwt_payload_handler(user)
+            #token = jwt_encode_handler(payload)
+            token = RefreshToken.for_user(user)
 
-            result = Response({'token': token, 'user_id': user.id}, status=status.HTTP_201_CREATED)
+            result = Response({'access': text_type(token.access_token), 'user_id': user.id}, status=status.HTTP_201_CREATED)
         else:
             result = Response(form.errors, status=status.HTTP_400_BAD_REQUEST)
         return result
