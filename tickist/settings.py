@@ -436,6 +436,10 @@ CELERYBEAT_SCHEDULE = {
         'task': 'dashboard.tasks.tasks.unsuspend_tasks',
         'schedule': timedelta(hours=1),
     },
+    'db_backup': {
+        'task': 'commons.utils.tasks.db_backup',
+        'schedule': timedelta(days=1),
+    },
     'daily_summary': {
         'task': 'notifications.tasks.daily_summary',
         'schedule': timedelta(minutes=5),
