@@ -5,7 +5,7 @@ from users import models
 
 
 class UserFactory(factory.django.DjangoModelFactory):
-    email = factory.LazyAttribute(lambda o: '%s@example.com' % o.username)
+    email = factory.LazyAttribute(lambda o: '%s@tickist.com' % o.username)
     username = factory.Sequence(lambda n: 'james_%d' % n)
     password = "pass"
     daily_summary_hour = "23:59:59"
