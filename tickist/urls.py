@@ -1,16 +1,16 @@
 #-*- coding: utf-8 -*-
 from django.conf.urls import include, url
+from rest_framework.renderers import JSONRenderer
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework_simplejwt.views import TokenObtainPairView
+from users.serializers import UserSerializer
 from .sitemaps import StaticViewSitemap
 from django.utils.six import text_type
 from django.contrib.sitemaps.views import sitemap
-from django.conf import settings
 from django.conf.urls.static import static
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
 from django.conf import settings
-from django.conf.urls.i18n import i18n_patterns
-from django.utils.translation import ugettext_lazy as _
-#admin.autodiscover()
 from users.views import  UserTagsViewSet
 from dashboard.lists.views import ListViewSet
 from users.views import UserViewSet
@@ -27,8 +27,6 @@ router.register(r'tag', UserTagsViewSet, base_name="tag")
 router.register(r'project', ListViewSet, base_name="list")
 router.register(r'user', UserViewSet)
 
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from rest_framework_simplejwt.views import TokenObtainPairView
 
 
 
