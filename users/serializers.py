@@ -20,7 +20,7 @@ class UserSerializer(serializers.ModelSerializer):
                   "order_tasks_dashboard", "deletes_list_shared_with_me", "default_task_view_today_view",
                   "default_task_view_overdue_view", "default_task_view_future_view", "default_task_view_tags_view",
                   "default_task_view", "overdue_tasks_sort_by", "future_tasks_sort_by", "all_tasks_view",
-                  "projects_filter_id", "tags_filter_id")
+                  "projects_filter_id", "tags_filter_id", "dialog_time_when_task_finished_in_project")
 
 
 class SimpleUserSerializer(serializers.ModelSerializer):

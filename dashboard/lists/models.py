@@ -52,7 +52,7 @@ class List(MPTTModel):
         Model listy
     """
 
-    name = models.CharField(max_length=40)
+    name = models.CharField(max_length=100)
     description = models.TextField(max_length=400, default="", blank=True, null=True)
     logo = models.ImageField(upload_to=get_path, default=settings.DEFAULT_LIST_LOGO)
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="owner_list",  on_delete=models.DO_NOTHING)
