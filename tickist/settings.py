@@ -19,6 +19,7 @@ from django.core.exceptions import ImproperlyConfigured
 
 msg ="Set the %s environment variable"
 
+
 def get_env_variable(var_name):
     try:
         return os.environ[var_name]
@@ -27,14 +28,17 @@ def get_env_variable(var_name):
         raise ImproperlyConfigured(error_msg)
 
 
+def get_current_year():
+    return datetime.datetime.now().year
+
 
 PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__)) + "/../"
 sys.path.insert(0, join(PROJECT_ROOT, "apps"))
 sys.path.insert(0, join(PROJECT_ROOT, "external_apps"))
 
 DEBUG = ast.literal_eval(os.environ.get("DEBUG", "False"))
-PRODUCTION =ast.literal_eval(os.environ.get("PRODUCTION", "True"))
-CELERY_ALWAYS_EAGER =ast.literal_eval(os.environ.get("CELERY_ALWAYS_EAGER", "True"))
+PRODUCTION = ast.literal_eval(os.environ.get("PRODUCTION", "True"))
+CELERY_ALWAYS_EAGER = ast.literal_eval(os.environ.get("CELERY_ALWAYS_EAGER", "True"))
 
 ADMINS = ()
 
@@ -425,7 +429,7 @@ SOCIAL_AUTH_GOOGLE_PLUS_KEY = os.environ.get("GOOGLE_OAUTH2_CLIENT_ID", "")
 SOCIAL_AUTH_GOOGLE_PLUS_SECRET = os.environ.get("GOOGLE_OAUTH2_CLIENT_SECRET", "")
 
 #email
-SETTINGS_VARIABLES_IN_EMAIL = ['FACEBOOK_FANPAGE', 'GOOGLE_PLUS', 'TWITTER', 'DOMAIN']
+SETTINGS_VARIABLES_IN_EMAIL = ['FACEBOOK_FANPAGE', 'GOOGLE_PLUS', 'TWITTER', 'DOMAIN', 'CURRENT_YEAR']
 
 
 #django celery
@@ -510,6 +514,10 @@ SIMPLE_JWT = {
 
 
 DBBACKUP_FILENAME_TEMPLATE = 'ticksist-dump-database-{datetime}.{extension}'
+
+CURRENT_YEAR = get_current_year()
+FACEBOOK_FAN_PAGE = 'https://www.facebook.com/Tickist/'
+TWITTER = 'https://twitter.com/Tickist/'
 
 if PRODUCTION:
     DBBACKUP_STORAGE = 'storages.backends.dropbox.DropBoxStorage'

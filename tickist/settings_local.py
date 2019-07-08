@@ -58,8 +58,10 @@ CACHES = {
 ALLOWED_HOSTS = ['www.tickist.com', 'tickist.com', 'localhost', 'app.tickist.com']
 SOCIAL_AUTH_REDIRECT_IS_HTTPS = False
 
+
 def custom_show_toolbar(request):
      return True  # Always show toolbar, for example purposes only.
+
 
 DEBUG_TOOLBAR_CONFIG = {
     'SHOW_TOOLBAR_CALLBACK': 'tickist.settings.custom_show_toolbar',
