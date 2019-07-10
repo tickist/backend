@@ -24,7 +24,7 @@ django-rosetta==0.7.14
 django-session-cleanup==1.0.0
 django-smtp-ssl==1.0
 django-storages==1.7.1
-djangorestframework==3.8.2
+djangorestframework==3.9.1
 djangorestframework_simplejwt
 docutils==0.14
 dropbox==9.1.0
