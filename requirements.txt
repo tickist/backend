@@ -62,7 +62,7 @@ social-auth-core==1.7.0
 South==0.8.1
 sqlparse==0.2.0
 text-unidecode==1.2
-urllib3==1.23
+urllib3==1.24.2
 uWSGI==2.0.15
 vine==1.1.4
 
