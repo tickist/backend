@@ -80,3 +80,4 @@ site.retry
 celerybeat.pid
 
 .DS_Store
+credentials.json
