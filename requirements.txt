@@ -41,7 +41,7 @@ mock==2.0.0
 Naked==0.1.31
 oauthlib==2.1.0
 pbr==4.2.0
-Pillow==5.2.0
+Pillow==6.2.0
 polib==1.1.0
 psycopg2==2.7.5
 pyasn1==0.1.7
